@@ -4,10 +4,12 @@
 
 :root {
   --background-color: #1d1823;
+  --asdasd: #41354e;
 }
 
-body {
+html {
   padding: 0;
   margin: 0;
   background-color: var(--background-color);
+  -webkit-tap-highlight-color: transparent;
 }
