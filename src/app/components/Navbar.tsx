@@ -18,12 +18,14 @@ export function Navbar() {
         } justify-between flex-row items-center z-10 max-w-7xl relative p-8 m-auto mb-12`}
       >
         <div className="flex items-center flex-row no-underline gap-3 list-none">
+          <Link href={"/"}>
           <Image
             className="rounded-full transition-all delay-75 hover:scale-110 cursor-pointer"
             width={40}
             src={semibotImg}
             alt="logo"
           />
+          </Link>
           <hr className="opacity-60 h-8 border-l-2 border-nav mx-3 max-lg:hidden" />
           <Link
             className="text-gray-400 text-base hover:text-white transition ease-linear  font-medium max-lg:hidden"

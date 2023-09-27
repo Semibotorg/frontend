@@ -16,7 +16,10 @@ const config: Config = {
         'discord-hover':"#4e5add",
         'bars':"#31293b",
         'navResponsive':'#2c2435',
-        'navResponsiveHover':'#41354e'
+        'navResponsiveHover':'#41354e',
+        'guild':'#221C28',
+        'guildDashboardBtn':'#2A2332',
+        'guildDashboardBtn-hover':'#32293C'
       }
     },
   },

@@ -4,7 +4,7 @@
 
 :root {
   --background-color: #1d1823;
-  --asdasd: #41354e;
+  --scroll-color: #2c2435;
 }
 
 html {
@@ -12,4 +12,14 @@ html {
   margin: 0;
   background-color: var(--background-color);
   -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-color);
+  border-radius: 50px;
 }

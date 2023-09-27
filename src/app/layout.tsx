@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Navbar } from "./components";
 
-const poppins = Poppins({weight: ["100","200","300","400","500","600","700","800"], subsets:['latin']});
+const poppins = Poppins({weight: ["400","500","600","700","800"], subsets:['latin']});
 
 export const metadata: Metadata = {
   title: "Create Next App",
