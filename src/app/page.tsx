@@ -1,15 +1,70 @@
+"use client"
 import Image from "next/image";
+import { useEffect, Suspense, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { features } from "../content/features";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { userSlice } from "../redux/slices/userSlice";
+import { getUser } from "../utils/index";
+import Link from "next/link";
+import { Loader } from "./components/Loader";
+import { loadingSlice } from "@/redux/slices/loadingSlice";
+
 export default function Home() {
+  const dispatch = useDispatch();
+  const userRedux = useSelector((state: RootState) => state.user);
+  const loadingRedux = useSelector((state: RootState) => state.loading);
+
+  const [loading, setLoading] = useState(true)
+  async function LoginDiscord() {
+    window.open(
+      `${process.env.BACKEND_API_URL}/auth/login`,
+      "_blank",
+      `toolbar=no, location=no, directories=no,
+    status=no, menubar=no, scrollbars=no, resizable=no,
+    copyhistory=no, width=800, height=1200,
+    top=${window.screen.height / 2 - 600 / 2}, left=${
+        window.screen.width / 2 - 450 / 2
+      }`
+    );
+
+    window.addEventListener("message", async (message) => {
+      if (message.origin !== process.env.BACKEND_API_ORIGIN)
+        return console.log("Invalid Origin");
+      const data = JSON.parse(message.data);
+      localStorage.token = data.token;
+      const user = await getUser(localStorage.token);
+
+      if (user) return dispatch(userSlice.actions.addUser(user));
+    });
+  }
+
+  useEffect(() => {
+    if (!userRedux && localStorage.token) {
+      dispatch(loadingSlice.actions.setLoading(true))
+      getUser(localStorage.token ?? "")
+        .then((data) => {
+          dispatch(userSlice.actions.addUser(data));
+          setLoading(false)
+        })
+        .catch((err) => {
+          localStorage.removeItem("token");
+          dispatch(userSlice.actions.clearData({}));
+          dispatch(loadingSlice.actions.setLoading(false))
+        });
+    }else {
+      dispatch(loadingSlice.actions.setLoading(false))
+    }
+  }, [dispatch, userRedux]);
   return (
     <>
       <main className="max-w-7xl p-8 relative m-auto">
         <div className="flex justify-center flex-col items-center mb-64">
           <div className="mb-6">
             <h1 className="text-white font-bold text-4xl max-md:text-3xl text-center">
-              Monetize your discord server with no fees!
+              Monetize your discord server with no fees! 
             </h1>
           </div>
           <div className="flex flex-row max-md:w-full gap-5 max-md:flex-col max-md:gap-0">
@@ -25,9 +80,27 @@ export default function Home() {
               </button>
             </div>
             <div className="mt-8 max-md:mt-3">
-              <button className="bg-navResponsive max-md:w-full hover:bg-navResponsiveHover transition active:scale-95 ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md">
-                <span className="text-md">Login</span>
+              {userRedux && !loadingRedux ? (
+                <Link href="/dashboard">
+                  <button className="bg-navResponsive max-md:w-full hover:bg-navResponsiveHover transition active:scale-95 ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md">
+                    <span className="text-md">Dashboard</span>
+                  </button>
+                </Link>
+              ) : !loadingRedux ? (
+                <button
+                  onClick={LoginDiscord}
+                  className="bg-navResponsive max-md:w-full hover:bg-navResponsiveHover transition active:scale-95 ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md"
+                >
+                  <span className="text-md">Login</span>
+                </button>
+              ) : (
+                <button
+                disabled={true}
+                className="bg-navResponsive max-md:w-full  transition ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md"
+              >
+                <span className="text-md"><Loader/></span>
               </button>
+              )}
             </div>
           </div>
         </div>

@@ -20,6 +20,9 @@ const config: Config = {
         'guild':'#221C28',
         'guildDashboardBtn':'#2A2332',
         'guildDashboardBtn-hover':'#32293C'
+      },
+      maxWidth:{
+        'guildName':'190px'
       }
     },
   },
