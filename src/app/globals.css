@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background-color: #1d1823;
+  --background-color: #1D1823;
   --scroll-color: #2c2435;
 }
 
@@ -22,4 +22,17 @@ html {
 ::-webkit-scrollbar-thumb {
   background: var(--scroll-color);
   border-radius: 50px;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.content-area {
+  height: 100%; /* Set a fixed height, adjust as needed */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
 }

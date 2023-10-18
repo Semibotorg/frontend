@@ -3,19 +3,20 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import semibotImg from "../../../public/logo/semibot.png";
+import semibotImg from "../../public/logo/semibot.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { getUser } from "../../utils";
+import { getUser } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { userSlice } from "../../redux/slices/userSlice";
+import { RootState } from "../redux/store";
+import { userSlice } from "../redux/slices/userSlice";
 import { nav } from "@/content/nav";
 import { Loader } from "./Loader";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export function Navbar() {
+  const pathname = usePathname()
   const dispatch = useDispatch();
   const userRedux = useSelector((state: RootState) => state.user);
   const loadingRedux = useSelector((state: RootState) => state.loading);
@@ -50,7 +51,8 @@ export function Navbar() {
   }
 
   const [isMenu, setMenu] = useState(false);
-  return (
+  console.log({pathname})
+  return !( /^\/dashboard\/\d+/.test(pathname))  && (
     <div className="w-full">
       <nav
         className={`flex ${
@@ -80,10 +82,10 @@ export function Navbar() {
 
         <div className="flex items-center flex-row no-underline list-none gap-5 max-lg:hidden">
           {userRedux?.id && !loadingRedux ? (
-            <div className="rounded-full cursor-pointer">
+            <div className="rounded-full">
               <Image
                 onClick={() => setMenuNav(!menuNav)}
-                className="w-12 h-12 p-1 rounded-full ring-2 via-violet-600"
+                className="w-12 h-12 p-1 rounded-full ring-2 via-violet-600 cursor-pointer"
                 src={
                   userRedux.avatar?.startsWith("a_")
                     ? `https://cdn.discordapp.com/avatars/${userRedux.id}/${userRedux.avatar}.gif`
@@ -100,7 +102,10 @@ export function Navbar() {
                   className="z-10 p-2 absolute bg-guild rounded-lg shadow w-44"
                 >
                   <div className="py-1">
-                    <div onClick={Logout} className="block px-4 py-2 text-sm text-gray-400 hover:text-white transition ease rounded-md hover:bg-guildDashboardBtn">
+                    <div
+                      onClick={Logout}
+                      className="block px-4 py-2 text-sm text-gray-400 hover:text-white transition ease rounded-md hover:bg-guildDashboardBtn cursor-pointer"
+                    >
                       Logout
                     </div>
                   </div>

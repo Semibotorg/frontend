@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { useEffect, Suspense, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import { RootState } from "../redux/store";
 import { userSlice } from "../redux/slices/userSlice";
 import { getUser } from "../utils/index";
 import Link from "next/link";
-import { Loader } from "./components/Loader";
+import { Loader } from "../components/Loader";
 import { loadingSlice } from "@/redux/slices/loadingSlice";
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
   const userRedux = useSelector((state: RootState) => state.user);
   const loadingRedux = useSelector((state: RootState) => state.loading);
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   async function LoginDiscord() {
     window.open(
       `${process.env.BACKEND_API_URL}/auth/login`,
@@ -43,19 +43,19 @@ export default function Home() {
 
   useEffect(() => {
     if (!userRedux && localStorage.token) {
-      dispatch(loadingSlice.actions.setLoading(true))
+      dispatch(loadingSlice.actions.setLoading(true));
       getUser(localStorage.token ?? "")
         .then((data) => {
           dispatch(userSlice.actions.addUser(data));
-          setLoading(false)
+          setLoading(false);
         })
         .catch((err) => {
           localStorage.removeItem("token");
           dispatch(userSlice.actions.clearData({}));
-          dispatch(loadingSlice.actions.setLoading(false))
+          dispatch(loadingSlice.actions.setLoading(false));
         });
-    }else {
-      dispatch(loadingSlice.actions.setLoading(false))
+    } else {
+      dispatch(loadingSlice.actions.setLoading(false));
     }
   }, [dispatch, userRedux]);
   return (
@@ -64,7 +64,7 @@ export default function Home() {
         <div className="flex justify-center flex-col items-center mb-64">
           <div className="mb-6">
             <h1 className="text-white font-bold text-4xl max-md:text-3xl text-center">
-              Monetize your discord server with no fees! 
+              Monetize your discord server with no fees!
             </h1>
           </div>
           <div className="flex flex-row max-md:w-full gap-5 max-md:flex-col max-md:gap-0">
@@ -95,11 +95,13 @@ export default function Home() {
                 </button>
               ) : (
                 <button
-                disabled={true}
-                className="bg-navResponsive max-md:w-full  transition ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md"
-              >
-                <span className="text-md"><Loader/></span>
-              </button>
+                  disabled={true}
+                  className="bg-navResponsive max-md:w-full  transition ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-12 pr-12 pt-2 pb-2 rounded-md"
+                >
+                  <span className="text-md">
+                    <Loader />
+                  </span>
+                </button>
               )}
             </div>
           </div>

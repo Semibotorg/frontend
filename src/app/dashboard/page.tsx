@@ -10,7 +10,8 @@ import { userSlice } from "../../redux/slices/userSlice";
 import { getGuilds, getUser } from "../../utils/index";
 import { guildsSlice } from "@/redux/slices/guildsSlice";
 import { loadingSlice } from "@/redux/slices/loadingSlice";
-import { SkeletonDashboard } from "../components";
+import { SkeletonDashboard } from "../../components";
+import Link from "next/link";
 
 export default function GuildPage() {
   const dispatch = useDispatch();
@@ -25,17 +26,17 @@ export default function GuildPage() {
       dispatch(loadingSlice.actions.setLoading(true));
       getUser(localStorage.token ?? "")
         .then((data) => {
-          if(data) dispatch(userSlice.actions.addUser(data));
+          if (data) dispatch(userSlice.actions.addUser(data));
           dispatch(loadingSlice.actions.setLoading(false));
         })
         .catch((err) => {
           localStorage.removeItem("token");
           dispatch(userSlice.actions.clearData({}));
-          router.push('/')
+          router.push("/");
           dispatch(loadingSlice.actions.setLoading(false));
         });
-    } else if(!localStorage.token) {
-      router.push('/')
+    } else if (!localStorage.token) {
+      router.push("/");
     }
     if (
       userRedux &&
@@ -48,7 +49,7 @@ export default function GuildPage() {
           setLoading(false);
         })
         .catch((err) => {
-          router.push('/')
+          router.push("/");
           localStorage.removeItem("token");
           dispatch(userSlice.actions.clearData({}));
           dispatch(loadingSlice.actions.setLoading(false));
@@ -96,9 +97,11 @@ export default function GuildPage() {
                 </span>
               </div>
               <div>
+                <Link href={`/dashboard/${guild.id}`}>
                 <button className="bg-guildDashboardBtn w-full hover:bg-guildDashboardBtn-hover transition active:scale-95 ease-linear text-white font-semibold flex justify-center items-center flex-row gap-3 pl-14 pr-14 pt-2 pb-2 rounded-md">
                   <span className="text-md">Dashboard</span>
                 </button>
+                </Link>
               </div>
             </div>
           ))}
